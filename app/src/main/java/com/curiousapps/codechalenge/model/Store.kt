@@ -9,4 +9,5 @@ class Store {
     var mZipcode = 0
     var mPhoneNumber: String? = null
     var mStoreLogoUrl: String? = null
+    var mStoreId = 0
 }

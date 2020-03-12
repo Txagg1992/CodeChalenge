@@ -1,9 +1,13 @@
 package com.curiousapps.codechalenge.activities
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.curiousapps.codechalenge.R
 import com.squareup.picasso.Picasso
@@ -15,8 +19,14 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        if (!isOnline()) {
+            Toast.makeText(
+                this, "The device is not connected to a network", Toast.LENGTH_LONG
+            ).show()
+        }
+
         val detailExtras = intent.extras
-        if (detailExtras != null){
+        if (detailExtras != null) {
             val storeLogoDetail = detailExtras.getString("logoUrl")
             val storeDetailName = detailExtras.getString("storeName")
             val storeDetailAddress = detailExtras.getString("address")
@@ -32,22 +42,28 @@ class DetailActivity : AppCompatActivity() {
             text_view_zip_detail.text = storeDetailZipCode.toString()
             text_view_phone_detail.text = storeDetailPhone
 
-            if (!TextUtils.isEmpty(storeLogoDetail)){
+            if (!TextUtils.isEmpty(storeLogoDetail)) {
                 Picasso.get()
                     .load(storeLogoDetail)
                     .into(image_view_store_logo_detail)
-            }else{
+            } else {
                 Picasso.get()
                     .load(R.mipmap.ic_launcher)
                     .into(image_view_store_logo_detail)
             }
         }
 
-        text_view_phone_detail.setOnClickListener{
+        text_view_phone_detail.setOnClickListener {
 
-            val intent  = Intent(Intent.ACTION_DIAL)
+            val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:${detailExtras?.getString("phone")}")
             startActivity(intent)
         }
+    }
+
+    fun isOnline(): Boolean {
+        val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
     }
 }
