@@ -1,6 +1,7 @@
 package com.curiousapps.codechalenge.activities
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
@@ -8,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.curiousapps.codechalenge.R
 import com.squareup.picasso.Picasso
@@ -20,6 +22,8 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         if (!isOnline()) {
+
+            showMessage()
             Toast.makeText(
                 this, "The device is not connected to a network", Toast.LENGTH_LONG
             ).show()
@@ -65,5 +69,19 @@ class DetailActivity : AppCompatActivity() {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
         return networkInfo?.isConnected == true
+    }
+
+    private fun showMessage(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.connection_error))
+        builder.setMessage(getString(R.string.connection_error_message))
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+            .setNegativeButton("OK", DialogInterface.OnClickListener {
+                    dialog, id -> dialog.cancel()
+            })
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 }

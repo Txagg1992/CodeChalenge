@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CodeChallenge</string>
+    <string name="connection_error">Connectivity Error</string>
+    <string name="connection_error_message">"This device does not have connectivity to an active network. \n"
+                "Some functionality may not be available due to loss of or no connection.\n"
+                "Please connect device to either Wi-Fi or mobile data network to properly view search results.\n"</string>
 </resources>
